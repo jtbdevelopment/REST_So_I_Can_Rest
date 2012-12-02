@@ -17,7 +17,6 @@ import android.media.RingtoneManager;
  */
 public class RESTService extends IntentService {
 
-
     public RESTService() {
         super(RESTService.class.getName());
     }

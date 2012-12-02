@@ -23,7 +23,10 @@ public class BootReceiver extends BroadcastReceiver {
 
     public static void kickOffReminderService(final Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, new Intent(context, RESTReceiver.class), 0);
+        final Intent intent = new Intent(context, RESTReceiver.class);
+        intent.putExtra(RESTReceiver.STARTUP_FLAG, true);
+        intent.putExtra(RESTReceiver.INTENT_MAKER, BootReceiver.class.getSimpleName());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000, pendingIntent);
     }
 }

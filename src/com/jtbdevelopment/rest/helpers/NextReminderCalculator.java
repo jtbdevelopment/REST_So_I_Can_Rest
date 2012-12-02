@@ -41,7 +41,7 @@ public class NextReminderCalculator {
         LocalDateTime currentYearEnd = getThisYearChristmasEve();
         LocalDateTime reminderForToday = new LocalDate().toLocalDateTime(getReminderTime());
         LocalDateTime now = new LocalDateTime();
-        if(reminderForToday.compareTo(now) > 0) {
+        if (reminderForToday.compareTo(now) < 0) {
             reminderForToday = reminderForToday.plusDays(1);
         }
         if (reminderForToday.compareTo(currentYearEnd) > 0) {
