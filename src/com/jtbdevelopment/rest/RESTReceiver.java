@@ -16,13 +16,8 @@ import org.joda.time.LocalDateTime;
  * Time: 9:18 PM
  */
 public class RESTReceiver extends BroadcastReceiver {
-    static boolean first = true;
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        if(!first) {
-            return;
-        }
-        first = false;
         setAnAlarm(context, NextReminderCalculator.getNextDailyReminderTime());
     }
 

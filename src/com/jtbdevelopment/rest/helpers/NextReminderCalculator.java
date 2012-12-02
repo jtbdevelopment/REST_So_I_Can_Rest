@@ -40,6 +40,10 @@ public class NextReminderCalculator {
         LocalDateTime currentYearStart = getThisYearThanksgiving();
         LocalDateTime currentYearEnd = getThisYearChristmasEve();
         LocalDateTime reminderForToday = new LocalDate().toLocalDateTime(getReminderTime());
+        LocalDateTime now = new LocalDateTime();
+        if(reminderForToday.compareTo(now) > 0) {
+            reminderForToday = reminderForToday.plusDays(1);
+        }
         if (reminderForToday.compareTo(currentYearEnd) > 0) {
             //  This Christmas is over (Dec 24 reminder time thru Dec 31)
             return getNextYearThanksgiving();
