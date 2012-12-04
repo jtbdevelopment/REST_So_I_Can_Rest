@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import com.jtbdevelopment.rest.helpers.AlarmType;
 
 /**
  * Created by IntelliJ IDEA.
@@ -21,10 +22,11 @@ public class BootReceiver extends BroadcastReceiver {
     }
 
     public static void kickOffReminderService(final Context context) {
+        AlarmType alarmType = AlarmType.BOOT;
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         final Intent intent = new Intent(context, RESTReceiver.class);
-        intent.putExtra(RESTReceiver.STARTUP_FLAG, true);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+        intent.putExtra(RESTReceiver.ALARM_TYPE, alarmType.toString());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarmType.getAlarmType(), intent, alarmType.getFlag());
         alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 10000, pendingIntent);
     }
 }

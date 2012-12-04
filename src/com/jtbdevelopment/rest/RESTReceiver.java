@@ -6,6 +6,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
+import com.jtbdevelopment.rest.helpers.AlarmType;
 import com.jtbdevelopment.rest.helpers.NextReminderCalculator;
 import org.joda.time.LocalDateTime;
 
@@ -16,27 +17,37 @@ import org.joda.time.LocalDateTime;
  * Time: 9:18 PM
  */
 public class RESTReceiver extends BroadcastReceiver {
-    public final static String STARTUP_FLAG = "STARTUP";
+    public final static String ALARM_TYPE = "ALARM_TYPE";
 
     @Override
     public void onReceive(final Context context, final Intent intent) {
-        final boolean startup = intent.getBooleanExtra(STARTUP_FLAG, true);
-        if (!startup) {
-            Log.d("R.E.S.T.", "Kicking service from receiver = start false");
-            Intent serviceIntent = new Intent(context, RESTService.class);
-            context.startService(serviceIntent);
-        } else {
-            Log.d("R.E.S.T.", "Skipping RESTReceiver = start true");
+        AlarmType alarmType = AlarmType.valueOf(intent.getStringExtra(ALARM_TYPE));
+        Log.d("R.E.S.T.", alarmType.toString() + " alarm");
+        switch (alarmType) {
+            case ALARM:
+                setAnAlarm(context, alarmType, NextReminderCalculator.getNextDailyReminderTime());
+                fireRESTService(context);
+                break;
+            case SNOOZE:
+                fireRESTService(context);
+                break;
+            case BOOT:
+                setAnAlarm(context, AlarmType.ALARM, NextReminderCalculator.getNextDailyReminderTime());
+                break;
         }
-        setAnAlarm(context, NextReminderCalculator.getNextDailyReminderTime());
     }
 
-    public static void setAnAlarm(final Context context, LocalDateTime alarmTime) {
-        Log.d("R.E.S.T.", "Next trigger at " + alarmTime);
+    private void fireRESTService(final Context context) {
+        Intent serviceIntent = new Intent(context, RESTService.class);
+        context.startService(serviceIntent);
+    }
+
+    public static void setAnAlarm(final Context context, AlarmType alarmType, LocalDateTime alarmTime) {
+        Log.d("R.E.S.T.", "Next trigger at " + alarmTime + " of type " + alarmType);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         final Intent alarmIntent = new Intent(context, RESTReceiver.class);
-        alarmIntent.putExtra(STARTUP_FLAG, false);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, alarmIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmIntent.putExtra(ALARM_TYPE, alarmType.toString());
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarmType.getAlarmType(), alarmIntent, alarmType.getFlag());
         alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.toDateTime().getMillis(), pendingIntent);
     }
 }

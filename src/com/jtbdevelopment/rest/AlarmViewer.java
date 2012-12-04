@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import com.jtbdevelopment.rest.helpers.AlarmType;
 import org.joda.time.LocalDateTime;
 
 /**
@@ -27,7 +28,7 @@ public class AlarmViewer extends Activity {
             @Override
             public void onClick(final View view) {
                 //  TODO - make configurable
-                RESTReceiver.setAnAlarm(AlarmViewer.this, new LocalDateTime().plusMinutes(30));
+                RESTReceiver.setAnAlarm(AlarmViewer.this, AlarmType.SNOOZE, new LocalDateTime().plusMinutes(30));
                 AlarmViewer.this.finish();
             }
         });
