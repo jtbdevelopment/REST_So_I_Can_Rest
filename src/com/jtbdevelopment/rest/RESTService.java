@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
+import android.util.Log;
 
 /**
  * Created by IntelliJ IDEA.
@@ -23,6 +24,7 @@ public class RESTService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
+        Log.d("R.E.S.T.", "REST Service kicked");
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Notification.Builder builder = new Notification.Builder(this);
         builder.setContentTitle("It's time to move it move it!");
