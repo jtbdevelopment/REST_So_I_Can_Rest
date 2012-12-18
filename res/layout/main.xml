@@ -18,10 +18,24 @@
             android:text="XX XXX XXXX XX:XX:XX"
             />
 
+    <TextView
+            android:id="@+id/reminderText"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/reminderTime"
+            android:text="XXXX"
+            />
+
+    <Button android:id="@+id/preferenceButton"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/reminderText"
+            android:text="Preferences"
+            />
     <ImageView android:id="@+id/elfImage"
                android:layout_width="wrap_content"
                android:layout_height="wrap_content"
-               android:layout_below="@+id/remindMeMore"
+               android:layout_below="@+id/preferenceButton"
                android:layout_centerInParent="true"
                android:src="@drawable/smilingelves"/>
 </RelativeLayout>

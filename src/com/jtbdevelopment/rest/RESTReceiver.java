@@ -25,14 +25,14 @@ public class RESTReceiver extends BroadcastReceiver {
         Log.d("R.E.S.T.", alarmType.toString() + " alarm");
         switch (alarmType) {
             case ALARM:
-                setAnAlarm(context, alarmType, NextReminderCalculator.getNextDailyReminderTime());
+                setAnAlarm(context, alarmType, NextReminderCalculator.getNextDailyReminderTime(context));
                 fireRESTService(context);
                 break;
             case SNOOZE:
                 fireRESTService(context);
                 break;
             case BOOT:
-                setAnAlarm(context, AlarmType.ALARM, NextReminderCalculator.getNextDailyReminderTime());
+                setAnAlarm(context, AlarmType.ALARM, NextReminderCalculator.getNextDailyReminderTime(context));
                 break;
         }
     }
@@ -45,9 +45,21 @@ public class RESTReceiver extends BroadcastReceiver {
     public static void setAnAlarm(final Context context, AlarmType alarmType, LocalDateTime alarmTime) {
         Log.d("R.E.S.T.", "Next trigger at " + alarmTime + " of type " + alarmType);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        PendingIntent pendingIntent = getPendingIntent(context, alarmType);
+        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.toDateTime().getMillis(), pendingIntent);
+    }
+
+    private static PendingIntent getPendingIntent(final Context context, final AlarmType alarmType) {
         final Intent alarmIntent = new Intent(context, RESTReceiver.class);
         alarmIntent.putExtra(ALARM_TYPE, alarmType.toString());
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, alarmType.getAlarmType(), alarmIntent, alarmType.getFlag());
-        alarmManager.set(AlarmManager.RTC_WAKEUP, alarmTime.toDateTime().getMillis(), pendingIntent);
+        return PendingIntent.getBroadcast(context, alarmType.getAlarmType(), alarmIntent, alarmType.getFlag());
+    }
+
+    public static void cancelAlarms(final Context context) {
+        PendingIntent snoozeIntent = getPendingIntent(context, AlarmType.SNOOZE);
+        PendingIntent alarmIntent = getPendingIntent(context, AlarmType.ALARM);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(snoozeIntent);
+        alarmManager.cancel(alarmIntent);
     }
 }

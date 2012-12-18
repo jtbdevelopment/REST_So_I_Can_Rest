@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.media.RingtoneManager;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -27,7 +28,8 @@ public class RESTService extends IntentService {
         Log.d("R.E.S.T.", "REST Service kicked");
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         Notification.Builder builder = new Notification.Builder(this);
-        builder.setContentTitle("It's time to move it move it!");
+        String message = PreferenceManager.getDefaultSharedPreferences(this).getString("alarmText", this.getString(R.string.defaultAlarmText));
+        builder.setContentTitle(message);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.drawable.alerticon));
         builder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
         builder.setVibrate(new long[]{100, 200, 100, 500, 100, 500});

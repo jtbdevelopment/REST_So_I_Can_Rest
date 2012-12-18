@@ -2,4 +2,8 @@
 <resources>
     <string name="app_name">R.E.S.T, So I Can Rest!</string>
     <string name="doneButtonString">Done!</string>
+    <string name="alarmTimeLabel">Reminder Time</string>
+    <string name="alarmTextLabel">Alarm Message</string>
+    <string name="defaultAlarmTime">21:00</string>
+    <string name="defaultAlarmText">It\'s time to move it, move it!</string>
 </resources>
